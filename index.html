@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style> 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }  
+        html,
+        body {
+        height: 100vh;
+        }     
+        /* scroller */
+        /* scroller */
+        /* scroller */
+
+        .sticky--container {
+            position: relative;
+        }
+
+        #hero-screen--canvas,
+        #hero-screen--canvas2, 
+        #hero-screen--canvas3 {
+        z-index: 1;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        max-width: 100vw;
+        min-height: 100vh;
+        justify-content: center;
+        display: flex;
+        }
+
+        .scrubber--container {
+        z-index: -1;
+        position: absolute;
+        top: 0%;
+        bottom: 0%;
+        left: 0%;
+        right: 0%;
+        }
+
+        .sticky--spacer {
+        display: block !important;
+        height: 200vh;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/ScrollTrigger.min.js"></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", (event) => {
+        const canvas2 = document.getElementById("canvas-animation-wrapper2");
+        const context2 = canvas2.getContext("2d");
+        let heroscreen2 = document.querySelector("#hero-screen--canvas2");
+        let frameCount = 99;
+        let currentFrame = (index) =>
+        `video1/Smoke_Girl_0100${(index + 1)
+        .toString()
+        .padStart(3, "0")}.png`;
+        const images2 = [];
+        const sequence2 = {
+            frame: 0
+        };
+        for (let i = 9; i < frameCount; i++) {
+            const img = new Image();
+            img.src = currentFrame(i);
+            images2.push(img);
+        }
+        
+            function render() {
+              canvas2.width = heroscreen2.clientWidth;
+              canvas2.height = heroscreen2.clientHeight; 
+              context2.clearRect(0, 0, canvas2.width, canvas2.height);
+              const iw     = images2[sequence2.frame].width;
+              const ih     = images2[sequence2.frame].height;
+              const cw     = canvas2.width;
+              const ch     = canvas2.height;
+              const f      = Math.max(cw/iw, ch/ih);
+              context2.setTransform(
+                /*     scale x */ f,
+                /*      skew x */ 0,
+                /*      skew y */ 0,
+                /*     scale y */ f,
+                /* translate x */ (cw - f * iw) / 2,
+                /* translate y */ (ch - f * ih) / 2,
+              );
+              context2.drawImage(images2[sequence2.frame], 0, 0);
+            }
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.to(sequence2, {
+              frame: frameCount - 1,
+              snap: "frame",
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: "#canvas-animation-wrapper2",
+                start: "top top",
+                end: "+=2000",
+                scrub: 1,
+              },
+              onUpdate: render // use animation onUpdate instead of scrollTrigger's onUpdate
+            });
+            images2[0].onload = render;
+            // resize the canvas to fill browser window dynamically\
+            window.addEventListener('resize', resizeCanvas, false);  
+            function resizeCanvas() {
+              canvas2.width = heroscreen2.clientWidth;
+              canvas2.height = heroscreen2.clientHeight;                    
+              render();
+            }
+            resizeCanvas();
+          });
+      </script>
+      <script>
+          window.addEventListener("DOMContentLoaded", (event) => {
+          const canvas = document.getElementById("canvas-animation-wrapper");
+          const context = canvas.getContext("2d");
+          let heroscreen = document.querySelector("#hero-screen--canvas");
+          let frameCount = 109;
+          let currentFrame = (index) =>
+          `tp/TP_Scroll_0100${(index + 1)
+          .toString()
+          .padStart(3, "0")}.png`;
+  
+          const images = [];
+          const sequence = {
+              frame: 0
+          };
+          for (let i = 13; i < frameCount; i++) {
+              const img = new Image();
+              img.src = currentFrame(i);
+              images.push(img);
+          }
+          
+              function render() {
+                canvas.width = heroscreen.clientWidth;
+                canvas.height = heroscreen.clientHeight; 
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                const iw     = images[sequence.frame].width;
+                const ih     = images[sequence.frame].height;
+                const cw     = canvas.width;
+                const ch     = canvas.height;
+                const f      = Math.max(cw/iw, ch/ih);
+                context.setTransform(
+                  /*     scale x */ f,
+                  /*      skew x */ 0,
+                  /*      skew y */ 0,
+                  /*     scale y */ f,
+                  /* translate x */ (cw - f * iw) / 2,
+                  /* translate y */ (ch - f * ih) / 2,
+                );
+                context.drawImage(images[sequence.frame], 0, 0);
+              }
+              gsap.to(sequence, {
+                frame: frameCount - 1,
+                snap: "frame",
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: "#canvas-animation-wrapper",
+                  start: "top top",
+                  end: "+=2000",
+                  scrub: 1,
+                },
+                onUpdate: render // use animation onUpdate instead of scrollTrigger's onUpdate
+              });
+              images[0].onload = render;
+              // resize the canvas to fill browser window dynamically\
+              window.addEventListener('resize', resizeCanvas, false);  
+              function resizeCanvas() {
+                canvas.width = heroscreen.clientWidth;
+                canvas.height = heroscreen.clientHeight;                    
+                render();
+              }
+              resizeCanvas();
+            });
+      </script>
+</head>
+    
+<body>
+    <section class="sticky--container">
+        <div id="hero-screen--canvas">
+            <div class="scrubber--container">
+                <div class="gsap-canvas-scrubber w-embed w-script">
+                    <canvas id="canvas-animation-wrapper">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        <div class="sticky--spacer"></div>
+    </section>
+    <section class="sticky--container">
+        <div id="hero-screen--canvas2">
+            <div class="scrubber--container">
+                <div class="gsap-canvas-scrubber w-embed w-script">
+                    <canvas id="canvas-animation-wrapper2">
+
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        <div class="sticky--spacer"></div>
+    </section>
+    <!-- <section class="sticky">
+        <div class="p_container">
+            <div class="p1">
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic non quisquam voluptatum incidunt iste est officiis minus dolore perferendis. A esse mollitia iusto tempora voluptates veniam quasi aspernatur dicta reiciendis.</p>
+            </div>
+            <div class="p2">
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni eius voluptate sit iure deserunt deleniti aperiam distinctio suscipit odio. Dicta corporis officiis a voluptatibus! Dolores ipsam nisi dolorem ea vel!</p>
+            </div>
+        </div>
+    </section> -->
+</body>
+
+
+</html>
